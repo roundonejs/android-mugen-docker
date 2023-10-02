@@ -7,9 +7,11 @@ ENV NDK_PATH /android-ndk-r9d
 ENV NDK_HOST_AWK /usr/bin/gawk
 ENV KEYSTORE_NAME keystore_name
 ENV KEYSTORE_PASSWORD keystore_password
+ENV GAME_APK_NAME ""
+ENV GAME_NAME ""
 
 # Install operational system dependencies
-RUN pacman -Syu --noconfirm && pacman -S jdk11-openjdk jdk17-openjdk unzip git --noconfirm
+RUN pacman -Syu --noconfirm && pacman -S jdk11-openjdk jdk17-openjdk unzip git imagemagick --noconfirm
 
 # Install Android Command-line tools
 RUN curl https://dl.google.com/android/repository/commandlinetools-linux-${SDK_VERSION}.zip --output cmdline-tools.zip
@@ -43,11 +45,18 @@ RUN rm -R app/src/main/assets/mugen/
 RUN rm app/build/outputs/apk/debug/app-debug.apk
 RUN rm app/build/outputs/apk/release/app-release-unsigned.apk
 
+# Remove icons
+RUN rm /android-mugen/app/src/main/res/drawable-hdpi/icon.png
+RUN rm /android-mugen/app/src/main/res/drawable-ldpi/icon.png
+RUN rm /android-mugen/app/src/main/res/drawable-mdpi/icon.png
+RUN rm /android-mugen/app/src/main/res/drawable-xhdpi/icon.png
+
 # Volumes
 RUN mkdir /android-mugen/app/src/main/assets/mugen/
 RUN mkdir /output
 VOLUME /android-mugen/app/src/main/assets/mugen/
 VOLUME /game_certificate.key
+VOLUME /icon.png
 VOLUME /output
 
 # Run build
