@@ -3,7 +3,7 @@ FROM archlinux:base-devel-20230921.0.180222
 # Environment variables
 ENV SDK_VERSION "9477386_latest"
 ENV ANDROID_SDK_ROOT /android-sdk
-ENV NDK_PATH /android-ndk-r9d
+ENV NDK_VERSION "16.1.4479499"
 ENV NDK_HOST_AWK /usr/bin/gawk
 ENV KEYSTORE_NAME keystore_name
 ENV KEYSTORE_PASSWORD keystore_password
@@ -23,13 +23,7 @@ RUN rm cmdline-tools.zip
 # Install Android SDK
 WORKDIR /android-sdk/cmdline-tools/latest/bin
 RUN archlinux-java set java-17-openjdk
-RUN echo "y" | ./sdkmanager "build-tools;29.0.3" "patcher;v4" "platform-tools" "platforms;android-29" "tools"
-
-# Install Android NDK r9
-WORKDIR /
-RUN curl https://dl.google.com/android/ndk/android-ndk-r9d-linux-x86_64.tar.bz2 --output android-ndk-r9d-linux-x86_64.tar.bz2
-RUN tar -xvf android-ndk-r9d-linux-x86_64.tar.bz2
-RUN rm android-ndk-r9d-linux-x86_64.tar.bz2
+RUN echo "y" | ./sdkmanager "build-tools;29.0.3" "platform-tools" "platforms;android-29" "tools" "ndk;16.1.4479499"
 
 # Prepare for build
 RUN archlinux-java set java-11-openjdk
